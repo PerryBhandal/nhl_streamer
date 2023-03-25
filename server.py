@@ -3,7 +3,7 @@ import datetime
 import os
 
 # Replace this with the Twitch live stream URL you want to download
-twitch_url = "https://www.twitch.tv/your_channel_name"
+twitch_url = "https://www.twitch.tv/pearbear3000"
 
 # Generate a timestamp for the output file name
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
