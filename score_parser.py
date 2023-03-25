@@ -1,16 +1,24 @@
 import cv2
 import pytesseract
 
-# Load the image and define the ROI
-img = cv2.imread('path_to_image.png')
-x, y, w, h = 100, 100, 200, 50
-roi = img[y:y+h, x:x+w]
+# Load the image
+img = cv2.imread("test_scoreboard.png")
 
-# Convert the ROI to grayscale and apply thresholding
-gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+# Display the image and let the user select the ROI
+roi = cv2.selectROI(img)
 
-# Use Tesseract OCR to extract the text
-text = pytesseract.image_to_string(thresh)
+# Extract the text within the ROI using Pytesseract
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+x, y, w, h = roi
+roi_gray = gray[y:y+h, x:x+w]
+text = pytesseract.image_to_string(roi_gray)
 
+# Draw a rectangle around the ROI and display the result
+cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+cv2.imshow("Image with ROI", img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+# Print the extracted text
+print("The extracted text is " + text)
 print(text)
