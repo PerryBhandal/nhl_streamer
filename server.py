@@ -2,8 +2,8 @@ import subprocess
 import datetime
 import os
 
-# Replace this with the YouTube live stream URL you want to download
-youtube_url = "https://www.youtube.com/watch?v=your_video_id"
+# Replace this with the Twitch live stream URL you want to download
+twitch_url = "https://www.twitch.tv/your_channel_name"
 
 # Generate a timestamp for the output file name
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -18,7 +18,7 @@ max_file_size = 500 * 1024 * 1024
 file_size = 0
 
 # Build the ffmpeg command
-ffmpeg_command = f"ffmpeg -i '{youtube_url}' -c copy '{output_filename}'"
+ffmpeg_command = f"ffmpeg -i '{twitch_url}' -c copy '{output_filename}'"
 
 # Start the ffmpeg process
 process = subprocess.Popen(ffmpeg_command, shell=True)
@@ -38,7 +38,7 @@ while process.poll() is None:
         output_filename = "_".join(parts)
         
         # Start a new ffmpeg process with the updated file name
-        ffmpeg_command = f"ffmpeg -i '{youtube_url}' -c copy '{output_filename}'"
+        ffmpeg_command = f"ffmpeg -i '{twitch_url}' -c copy '{output_filename}'"
         process.kill()  # Kill the old ffmpeg process
         process = subprocess.Popen(ffmpeg_command, shell=True)
     
