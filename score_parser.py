@@ -19,7 +19,7 @@ def select_roi(event, x, y, flags, params):
         h = y - roi[1]
         roi = (roi[0], roi[1], w, h)
         roi_gray = gray[roi[1]:roi[1]+roi[3], roi[0]:roi[0]+roi[2]]
-        text = pytesseract.image_to_string(roi_gray, config='--psm 6')
+        text = pytesseract.image_to_string(roi_gray, config='--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789')
         print(text)
         cv2.rectangle(img, roi[:2], (roi[0]+roi[2], roi[1]+roi[3]), (0, 255, 0), 2)
         cv2.imshow("Image", img)
