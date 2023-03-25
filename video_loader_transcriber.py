@@ -5,7 +5,7 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 # Load the video
-cap = cv2.VideoCapture("video.mp4")
+cap = cv2.VideoCapture("test_video.mp4")
 
 # Get the first frame and display it
 ret, img = cap.read()
