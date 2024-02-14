@@ -2,7 +2,7 @@ import cv2
 import pytesseract
 import subprocess
 import numpy as np
-import time
+from datetime import datetime 
 
 import pytesseract
 pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract' 
@@ -20,7 +20,7 @@ def extract_text_from_frame(frame, x, y, width, height):
     region = frame[y:y+height, x:x+width]
 
     # Resize the region
-    region = cv2.resize(region, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+    region = cv2.resize(region, None, fx=4, fy=4, interpolation=cv2.INTER_CUBIC)
 
     # Convert the region to grayscale
     gray = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
@@ -50,7 +50,10 @@ def main(youtube_url, regions):
 
         frame_counter += 1  # Increment the counter
 
-        if frame_counter == 30:  # If this is the 30th frame
+        if frame_counter == 15:  # If this is the 30th frame
+            current_time = datetime.now().strftime("%H:%M:%S.%f")[:-3]  # Get the current time including milliseconds
+            to_print = f"-> {current_time} <- "
+
             # Convert the frame to a format OpenCV can use
             frame = np.frombuffer(raw_image, np.uint8).reshape((height, width, 3))
 
@@ -61,11 +64,17 @@ def main(youtube_url, regions):
             x, y, w, h = regions[0]
             cv2.rectangle(frame_copy, (x, y), (x+w, y+h), (0, 255, 0), 2)  # Green box
 
+            # Draw a debug box around the second region
+            x, y, w, h = regions[1]
+            cv2.rectangle(frame_copy, (x, y), (x+w, y+h), (0, 255, 0), 2)  # Green box
+
+
             for i, (x, y, w, h) in enumerate(regions):
                 text = extract_text_from_frame(frame, x, y, w, h)
-                print(f"Text from region {i+1}: {text}")
+                to_print += text.strip() + " <-> "
 
-            cv2.imshow('Frame', frame_copy)
+            #cv2.imshow('Frame', frame_copy)
+            print(to_print)
             if cv2.waitKey(1) & 0xFF == ord('q'):  # Press 'q' to quit
                 break
 
@@ -77,9 +86,9 @@ def main(youtube_url, regions):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    youtube_url = 'https://www.youtube.com/watch?v=Qf1hciH75cw'
+    youtube_url = 'https://www.youtube.com/watch?v=kybff1kSWUE'
     regions = [
-        (725, 1019, 100, 61),  # x, y, width, height for the first region
+        (745, 1019, 75, 61),  # x, y, width, height for the first region
         (1079, 1020, 129, 62),  # x, y, width, height for the second region
     ]
     main(youtube_url, regions)
